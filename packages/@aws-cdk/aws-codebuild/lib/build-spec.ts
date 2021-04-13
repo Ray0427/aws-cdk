@@ -1,11 +1,53 @@
 import { IResolveContext, Lazy, Stack } from '@aws-cdk/core';
 import * as yaml_cfn from './private/yaml-cfn';
 
+export interface BuildSpecEnvProps {
+  readonly shell?: string;
+  readonly variables?: {
+    [key:string]: string;
+  };
+  readonly 'parameter-store'?: {
+    [key:string]: string;
+  };
+  readonly 'exported-variables'?: {
+    [key:string]: string;
+  };
+  readonly 'secrets-manager'?: {
+    [key:string]: string;
+  };
+  readonly 'git-credential-helper'?: boolean;
+};
+
+export interface BuildSpecPhasesBuildProps {
+  readonly 'run-as'?: string;
+  readonly commands?: string[];
+  readonly finally?: string[];
+};
+
+export interface BuildSpecPhasesInstallProps extends BuildSpecPhasesBuildProps {
+  readonly 'runtime-versions'?: {
+    [key: string]: string | number;
+  };
+}
+
+export interface BuildSpecPhasesProps {
+  readonly install?: BuildSpecPhasesInstallProps;
+  readonly pre_build?: BuildSpecPhasesBuildProps;
+  // readonly build?: BuildSpecPhasesBuildProps;
+  readonly post_build?: BuildSpecPhasesBuildProps;
+};
+
+export interface BuildSpecFromObjectProps {
+  readonly 'run-as'?: string;
+  readonly env?: BuildSpecEnvProps;
+  readonly phases?: BuildSpecPhasesProps;
+}
+
 /**
  * BuildSpec for CodeBuild projects
  */
 export abstract class BuildSpec {
-  public static fromObject(value: {[key: string]: any}): BuildSpec {
+  public static fromObject(value: BuildSpecFromObjectProps}): BuildSpec {
     return new ObjectBuildSpec(value);
   }
 
