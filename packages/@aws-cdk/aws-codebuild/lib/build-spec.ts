@@ -33,11 +33,12 @@ export interface BuildSpecPhasesInstallProps extends BuildSpecPhasesBuildProps {
 export interface BuildSpecPhasesProps {
   readonly install?: BuildSpecPhasesInstallProps;
   readonly pre_build?: BuildSpecPhasesBuildProps;
-  // readonly build?: BuildSpecPhasesBuildProps;
+  readonly build?: BuildSpecPhasesBuildProps;
   readonly post_build?: BuildSpecPhasesBuildProps;
 };
 
 export interface BuildSpecFromObjectProps {
+  readonly version?: string;
   readonly 'run-as'?: string;
   readonly env?: BuildSpecEnvProps;
   readonly phases?: BuildSpecPhasesProps;
