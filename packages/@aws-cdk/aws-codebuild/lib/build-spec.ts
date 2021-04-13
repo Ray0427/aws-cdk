@@ -47,7 +47,7 @@ export interface BuildSpecFromObjectProps {
  * BuildSpec for CodeBuild projects
  */
 export abstract class BuildSpec {
-  public static fromObject(value: BuildSpecFromObjectProps}): BuildSpec {
+  public static fromObject(value: BuildSpecFromObjectProps): BuildSpec {
     return new ObjectBuildSpec(value);
   }
 
