@@ -37,18 +37,59 @@ export interface BuildSpecPhasesProps {
   readonly post_build?: BuildSpecPhasesBuildProps;
 };
 
-export interface BuildSpecFromObjectProps {
+export interface BuildSpecProxyProps {
+  readonly 'upload-artifacts'?: boolean;
+  readonly logs?: boolean;
+}
+
+export interface BuildSpecReportsProps {
+  [key: string]: BuildSpecReportGroupProps
+}
+
+export interface BuildSpecReportGroupProps {
+  readonly files?: string[];
+  readonly 'base-directory'?: string;
+  readonly 'discard-paths'?: string;
+  readonly 'file-format'?: string;
+}
+
+export interface BuildSpecBaseArtifactsProps {
+  readonly files?: string[];
+  readonly name?: string;
+  readonly 'discard-path'?: boolean;
+  readonly 'base-directory'?: string;
+}
+
+export interface BuildSpecArtifactsSecondaryArtifactsProps {
+  readonly [key: string]: BuildSpecBaseArtifactsProps;
+}
+
+export interface BuildSpecArtifactsProps extends BuildSpecBaseArtifactsProps{
+  readonly 'enable-symlinks'?: boolean;
+  readonly 's3-prefix'?: string;
+  readonly 'secondary-artifacts': BuildSpecArtifactsSecondaryArtifactsProps;
+}
+
+export interface BuildSpecCacheProps {
+  readonly paths?: string[];
+}
+
+export interface BuildSpecProps {
   readonly version?: string;
   readonly 'run-as'?: string;
   readonly env?: BuildSpecEnvProps;
+  readonly proxy?: BuildSpecProxyProps;
   readonly phases?: BuildSpecPhasesProps;
+  readonly reports?: BuildSpecReportsProps;
+  readonly artifacts?: BuildSpecArtifactsProps;
+  readonly cache?: BuildSpecCacheProps;
 }
 
 /**
  * BuildSpec for CodeBuild projects
  */
 export abstract class BuildSpec {
-  public static fromObject(value: BuildSpecFromObjectProps): BuildSpec {
+  public static fromObject(value: BuildSpecProps): BuildSpec {
     return new ObjectBuildSpec(value);
   }
 

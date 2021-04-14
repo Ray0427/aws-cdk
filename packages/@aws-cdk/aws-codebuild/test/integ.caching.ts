@@ -15,8 +15,10 @@ const bucket = new s3.Bucket(stack, 'CacheBucket', {
 new codebuild.Project(stack, 'MyProject', {
   cache: Cache.bucket(bucket),
   buildSpec: codebuild.BuildSpec.fromObject({
-    build: {
-      commands: ['echo Hello'],
+    phases: {
+      build: {
+        commands: ['echo Hello'],
+      },
     },
     cache: {
       paths: ['/root/.cache/pip/**/*'],

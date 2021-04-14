@@ -40,13 +40,19 @@ export = {
 
     // WHEN
     new codebuild.Project(stack, 'Project', {
-      buildSpec: codebuild.BuildSpec.fromObject({ phases: ['say hi'] }),
+      buildSpec: codebuild.BuildSpec.fromObject({
+        phases: {
+          build: {
+            commands: ['say hi'],
+          },
+        },
+      }),
     });
 
     // THEN
     expect(stack).to(haveResourceLike('AWS::CodeBuild::Project', {
       Source: {
-        BuildSpec: '{\n  "phases": [\n    "say hi"\n  ]\n}',
+        BuildSpec: '{\n  "phases": {\n    "build": {\n      "commands": [\n        "say hi"\n      ]\n    }\n  }\n}',
       },
     }));
 
@@ -538,7 +544,7 @@ export = {
           version: '0.2',
           reports: {
             [reportGroup.reportGroupArn]: {
-              files: '**/*',
+              files: ['**/*'],
             },
           },
         }),
